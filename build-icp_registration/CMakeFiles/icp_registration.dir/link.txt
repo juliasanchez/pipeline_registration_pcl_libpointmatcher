@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/icp_registration.dir/icp_registration.cpp.o  -o icp_registration -rdynamic /usr/local/lib/libpointmatcher.so -lboost_thread -lboost_filesystem -lboost_system -lboost_program_options -lboost_date_time -lboost_chrono -lboost_atomic -lpthread /usr/local/lib/libnabo.a -lgomp -lrt -Wl,-rpath,/usr/local/lib 

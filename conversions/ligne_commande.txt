@@ -1,0 +1,2 @@
+sh conversion_csvtopcd.sh file.csv
+
