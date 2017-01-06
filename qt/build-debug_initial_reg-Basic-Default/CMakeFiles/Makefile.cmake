@@ -10,7 +10,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.5.2/CMakeCCompiler.cmake"
   "CMakeFiles/3.5.2/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.5.2/CMakeSystem.cmake"
-  "/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/CMakeLists.txt"
+  "/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/CMakeLists.txt"
   "/usr/lib/cmake/vtk-6.3/Modules/vtkChartsCore.cmake"
   "/usr/lib/cmake/vtk-6.3/Modules/vtkCommonColor.cmake"
   "/usr/lib/cmake/vtk-6.3/Modules/vtkCommonComputationalGeometry.cmake"

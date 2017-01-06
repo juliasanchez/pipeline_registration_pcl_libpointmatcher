@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/cloud.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/cloud.h
 vector
 -
 string
@@ -32,11 +32,11 @@ pcl/filters/uniform_sampling.h
 pcl/filters/conditional_removal.h
 -
 cloud.inl
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/cloud.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/cloud.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/cloud.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/cloud.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_clouds.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_clouds.h
 iostream
 -
 pcl/io/pcd_io.h
@@ -52,11 +52,11 @@ pcl/common/transforms.h
 pcl/visualization/pcl_visualizer.h
 -
 display_clouds.inl
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_clouds.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_clouds.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_clouds.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_clouds.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences.h
 iostream
 -
 pcl/io/pcd_io.h
@@ -74,11 +74,11 @@ pcl/visualization/pcl_visualizer.h
 pcl/registration/correspondence_estimation.h
 -
 display_correspondences.inl
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences_with_clouds.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences_with_clouds.h
 iostream
 -
 pcl/io/pcd_io.h
@@ -96,11 +96,11 @@ pcl/visualization/pcl_visualizer.h
 pcl/registration/correspondence_estimation.h
 -
 display_correspondences_with_clouds.inl
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences_with_clouds.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences_with_clouds.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences_with_clouds.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences_with_clouds.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_normals.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_normals.h
 iostream
 -
 pcl/io/pcd_io.h
@@ -118,11 +118,11 @@ pcl/features/normal_3d.h
 pcl/features/normal_3d_omp.h
 -
 display_normals.inl
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_normals.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_normals.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_normals.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_normals.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/keypoints_search.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/keypoints_search.h
 vector
 -
 string
@@ -146,25 +146,25 @@ pcl/point_types_conversion.h
 pcl/filters/extract_indices.h
 -
 keypoints_search.inl
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/keypoints_search.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/keypoints_search.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/keypoints_search.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/keypoints_search.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/main.cpp
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/main.cpp
 display_clouds.h
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_clouds.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_clouds.h
 display_normals.h
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_normals.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_normals.h
 display_correspondences.h
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences.h
 display_correspondences_with_clouds.h
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences_with_clouds.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/display_correspondences_with_clouds.h
 keypoints_search.h
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/keypoints_search.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/keypoints_search.h
 transformation_estimator.h
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/transformation_estimator.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/transformation_estimator.h
 cloud.h
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/cloud.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/cloud.h
 pcl/registration/transformation_validation_euclidean.h
 -
 pcl/registration/correspondence_estimation.h
@@ -174,15 +174,15 @@ pcl/registration/correspondence_rejection_median_distance.h
 pcl/registration/correspondence_rejection_one_to_one.h
 -
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/transformation_estimator.h
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/transformation_estimator.h
 pcl/io/pcd_io.h
 -
 pcl/registration/transformation_estimation_svd.h
 -
 transformation_estimator.inl
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/transformation_estimator.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/transformation_estimator.inl
 
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/transformation_estimator.inl
+/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/transformation_estimator.inl
 
 /usr/include/pcl-1.8/pcl/ModelCoefficients.h
 string

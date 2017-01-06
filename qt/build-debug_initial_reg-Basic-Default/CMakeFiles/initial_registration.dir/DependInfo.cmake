@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/debug_initial_reg/main.cpp" "/home/julia/Desktop/pipeline_pcl_libpointmatcher/qt/build-debug_initial_reg-Basic-Default/CMakeFiles/initial_registration.dir/main.cpp.o"
+  "/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/debug_initial_reg/main.cpp" "/home/julia/Desktop/pipeline_registration_pcl_libpointmatcher/qt/build-debug_initial_reg-Basic-Default/CMakeFiles/initial_registration.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
