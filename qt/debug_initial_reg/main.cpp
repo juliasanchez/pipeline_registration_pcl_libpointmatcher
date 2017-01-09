@@ -6,13 +6,15 @@
 #include "display_correspondences_with_clouds.h"
 #include "keypoints_search.h"
 #include "transformation_estimator.h"
-//#include "correspondences_search.h"
+#include "correspondences_search.h"
 #include "cloud.h"
 //#include "transformation_estimator.h"
 #include <pcl/registration/transformation_validation_euclidean.h>
 #include <pcl/registration/correspondence_estimation.h>
 #include <pcl/registration/correspondence_rejection_median_distance.h>
 #include <pcl/registration/correspondence_rejection_one_to_one.h>
+#include <pcl/features/fpfh.h>
+
 
 
 // PCL INCLUDES
@@ -87,8 +89,8 @@ int main(int argc, char** argv)
         //std::cout<<"Computing normals"<<std::endl<<std::endl;
         pcl::PointCloud<pcl::Normal>::Ptr normals1 (new pcl::PointCloud<pcl::Normal>);
         pcl::PointCloud<pcl::Normal>::Ptr normals2 (new pcl::PointCloud<pcl::Normal>);
-        cloud_src.getNormals(0.2, normals1);
-        cloud_tgt.getNormals(0.2, normals2);
+        cloud_src.getNormals(0.15, normals1);
+        cloud_tgt.getNormals(0.15, normals2);
 
         //display_normals(cloud1,normals1);
         //display_normals(cloud2,normals2);
@@ -122,7 +124,8 @@ int main(int argc, char** argv)
 
         std::cerr << "Number of points " << cloud1->width * cloud1->height << std::endl;
         std::cerr << "Number of keypoints " << keypoints1->width * keypoints1->height << std::endl;
-        display_clouds(cloud1, keypoints1, color2, color1, 1, 5);
+
+        display_clouds(cloud1, keypoints1, color2, color1, 1, 8);
 
         ks.setTree(tree2);
         ks.setInputCloud(cloud2);
@@ -132,84 +135,72 @@ int main(int argc, char** argv)
 
         std::cerr << "Number of points " << cloud2->width * cloud2->height << " data points." << std::endl;
         std::cerr << "Number of keypoints " << keypoints2->width * keypoints2->height << " data points." << std::endl;
-        display_clouds(cloud2, keypoints2, color2, color1, 1, 5);
+        display_clouds(cloud2, keypoints2, color2, color1, 1, 8);
 
-        pcl::registration::CorrespondenceEstimation<pcl_point, pcl_point> est;
-        est.setInputSource(keypoints1);
-        est.setInputTarget(keypoints2);
-        pcl::Correspondences correspondences;
-        est.determineCorrespondences(correspondences);
+//        pcl::registration::CorrespondenceEstimation<pcl_point, pcl_point> est;
+//        est.setInputSource(keypoints1);
+//        est.setInputTarget(keypoints2);
+//        pcl::Correspondences correspondences;
+//        est.determineCorrespondences(correspondences);
 
-        pcl::registration::CorrespondenceRejectorOneToOne rejector_oto;
-        rejector_oto.setInputCorrespondences(boost::make_shared<const pcl::Correspondences>(correspondences));
-        rejector_oto.getCorrespondences(correspondences);
+//        pcl::registration::CorrespondenceRejectorOneToOne rejector_oto;
+//        rejector_oto.setInputCorrespondences(boost::make_shared<const pcl::Correspondences>(correspondences));
+//        rejector_oto.getCorrespondences(correspondences);
 
-        pcl::registration::CorrespondenceRejectorMedianDistance rejector_dist;
-        rejector_dist.setInputCorrespondences(boost::make_shared<const pcl::Correspondences>(correspondences));
-        rejector_dist.setMedianFactor(4.0); //Points with distance greater than median times factor will be rejected
-        rejector_dist.getCorrespondences(correspondences);
+//        pcl::registration::CorrespondenceRejectorMedianDistance rejector_dist;
+//        rejector_dist.setInputCorrespondences(boost::make_shared<const pcl::Correspondences>(correspondences));
+//        rejector_dist.setMedianFactor(10.0); //Points with distance greater than median times factor will be rejected
+//        rejector_dist.getCorrespondences(correspondences);
         //display_correspondences(keypoints1, keypoints2, correspondences);
-        display_correspondences_with_clouds(cloud1, keypoints1, cloud2, keypoints2, correspondences);
-//
-// //Derive correspondences
-// 	//std::cout<<"Deriving correspondences"<<std::endl<<std::endl;
-// 	pcl::Correspondences correspondences;
-// 	correspondences_search<pcl_point> cs;
-// 	cs.setInputClouds(cloud1, cloud2);
-// 	cs.setInputNormals(normals1, normals2);
-// 	cs.setTrees(tree1, tree2);
-// 	cs.setInputKeypoints(keypoints1,keypoints2);
-// 	int des_method =atoi(argv[n]);
-// 	cs.setDescriptorMethod(des_method);
-// 	cs.setDescriptorRadius(atof(argv[n+1]));
-//
-// 	//cs.getFeatures();
-//
-// 	switch(des_method)
-// 	{
-// 		case 1: //FPFH
-// 		{
-// 			cs.DetermineCorrespondences<typename pcl::FPFHSignature33>();
-// 			break;
-// 		}
-// 		case 2: //3DSC //case 4:
-// 		{
-// 			cs.DetermineCorrespondences<typename pcl::ShapeContext1980>();
-// 			break;
-// 		}
-// 		case 3:  //USC
-// 		{
-// 			cs.DetermineCorrespondences<typename pcl::UniqueShapeContext1960>();
-// 			break;
-// 		}
-// 		default:
-// 		{
-// 			cs.DetermineCorrespondences<typename pcl::FPFHSignature33>();
-// 			break;
-// 		}
-// 	}
-// 	n=n+2;
-//
-// 	for (int i=n; i<argc; i++)
-// 	{
-// 		int rej_method=atoi(argv[i]);
-// 		cs.setRejectorMethod(rej_method);
-// 		cs.reject();
-// 	}
-// 	cs.getCorrespondences(&correspondences);
+//        display_correspondences_with_clouds(cloud1, keypoints1, cloud2, keypoints2, correspondences);
+
+ //Derive correspondences
+    //std::cout<<"Deriving correspondences"<<std::endl<<std::endl;
+    pcl::Correspondences correspondences;
+    pcl::FPFHEstimation<pcl_point, pcl::Normal, pcl::FPFHSignature33> feature_estimation;
+    feature_estimation.setRadiusSearch(0.2f);
+    feature_estimation.setSearchSurface(cloud1);
+    feature_estimation.setInputCloud(keypoints1);
+    feature_estimation.setInputNormals(normals1);
+    feature_estimation.setSearchMethod(tree1);
+    pcl::PointCloud<pcl::FPFHSignature33> features1;
+    feature_estimation.compute(features1);
+
+   pcl::FPFHEstimation<pcl_point, pcl::Normal, pcl::FPFHSignature33> feature_estimation2;
+    feature_estimation2.setRadiusSearch(0.2f);
+    feature_estimation2.setSearchSurface(cloud2);
+    feature_estimation2.setInputCloud(keypoints2);
+    feature_estimation2.setInputNormals(normals2);
+    feature_estimation2.setSearchMethod(tree2);
+    pcl::PointCloud<pcl::FPFHSignature33> features2;
+    feature_estimation2.compute(features2);
+
+
+    pcl::registration::CorrespondenceEstimation<pcl::FPFHSignature33, pcl::FPFHSignature33> est;
+
+    pcl::PointCloud<pcl::FPFHSignature33>::Ptr src_descriptor_ptr(new pcl::PointCloud<pcl::FPFHSignature33>);
+    pcl::PointCloud<pcl::FPFHSignature33>::Ptr tgt_descriptor_ptr(new pcl::PointCloud<pcl::FPFHSignature33>);
+    *src_descriptor_ptr=features1;
+    *tgt_descriptor_ptr=features2;
+    est.setInputSource(src_descriptor_ptr);
+    est.setInputTarget(tgt_descriptor_ptr);
+    est.determineCorrespondences(correspondences);
+    display_correspondences_with_clouds(cloud1, keypoints1, cloud2, keypoints2, correspondences);
+
 
  //Get transformation and transform src to tgt
 
-        //std::cout<<"Getting transformation"<<std::endl<<std::endl;
-        transformation_estimator<pcl_point> te;
-        te.setInputClouds(keypoints1, keypoints2);
-        te.setInputCorrespondences(&correspondences);
-        Eigen::Matrix4f* initial_transfo;
-        te.getTransfo(initial_transfo);
-        std::cout<<*initial_transfo<<std::endl<<std::endl;
-        pcl::PointCloud<pcl_point>::Ptr pre_aligned (new pcl::PointCloud<pcl_point>);
-        te.getTransformedPointcloud(cloud1, pre_aligned);
-        display_clouds(pre_aligned, cloud2, color1, color2, 1, 1);
+    //std::cout<<"Getting transformation"<<std::endl<<std::endl;
+    transformation_estimator<pcl_point> te;
+    te.setInputClouds(keypoints1, keypoints2);
+    te.setInputCorrespondences(&correspondences);
+    Eigen::Matrix4f* initial_transfo;
+    te.getTransfo(initial_transfo);
+    std::cout<<*initial_transfo<<std::endl<<std::endl;
+    pcl::PointCloud<pcl_point>::Ptr pre_aligned (new pcl::PointCloud<pcl_point>);
+    te.getTransformedPointcloud(cloud1, pre_aligned);
+    //display_clouds(cloud1, pre_aligned, color2, color1, 1, 1);
+    display_clouds(pre_aligned, cloud2, color1, color2, 1, 1);
 
-        return 0;
+    return 0;
 }

@@ -11,5 +11,7 @@ viewer.addPointCloud (cloud2, cloud2_color, "cloud2");
 viewer.addCorrespondences<pcl::PointXYZI> (cloud1, cloud2, correspondences);
 
 viewer.resetCamera (); 
-viewer.spin (); 
+  while (!viewer.wasStopped ()) { // Display the visualiser until 'q' key is pressed
+    viewer.spinOnce (10);
+  } 
 }

@@ -87,9 +87,9 @@ void cloud<points>::clean()
 //    sor.filter (*cloud_in);
 
     typename pcl::ConditionAnd<points>::Ptr condition (new pcl::ConditionAnd<points>);
-    condition->addComparison(typename pcl::FieldComparison<points>::ConstPtr(new typename pcl::FieldComparison<points>("x", pcl::ComparisonOps::LT, 6)));
-    condition->addComparison(typename pcl::FieldComparison<points>::ConstPtr(new typename pcl::FieldComparison<points>("y", pcl::ComparisonOps::LT, 6)));
-    condition->addComparison(typename pcl::FieldComparison<points>::ConstPtr(new typename pcl::FieldComparison<points>("z", pcl::ComparisonOps::LT, 6)));
+    condition->addComparison(typename pcl::FieldComparison<points>::ConstPtr(new typename pcl::FieldComparison<points>("x", pcl::ComparisonOps::LT, 3)));
+    condition->addComparison(typename pcl::FieldComparison<points>::ConstPtr(new typename pcl::FieldComparison<points>("y", pcl::ComparisonOps::LT, 3)));
+    condition->addComparison(typename pcl::FieldComparison<points>::ConstPtr(new typename pcl::FieldComparison<points>("z", pcl::ComparisonOps::LT, 3)));
 
     pcl::ConditionalRemoval<points> filter (condition);
     filter.setInputCloud(cloud_in);

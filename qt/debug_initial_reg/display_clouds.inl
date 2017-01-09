@@ -11,6 +11,7 @@ void display_clouds (pcl::PointCloud<pcl::PointXYZI>::Ptr cloud1, pcl::PointClou
   viewer.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, size1, "cloud1");
   viewer.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, size2, "cloud2");
   while (!viewer.wasStopped ()) { // Display the visualiser until 'q' key is pressed
-    viewer.spinOnce ();
+    viewer.spinOnce (1000);
+    //boost::this_thread::sleep(boost::posix_time::microseconds(10000));
   }
 }

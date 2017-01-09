@@ -131,15 +131,15 @@ void keypoints_search<points>::getKeypoints(typename pcl::PointCloud<points>::Pt
 			pcl::ISSKeypoint3D<points, points> iss;
 			iss.setSearchMethod ( tree );
                         iss.setSalientRadius (radius); // about 6 points to compute scatter matrix
-			iss.setNonMaxRadius ((min_neigh-1) * resolution); // toujours pas compris ce parametre
+			iss.setMinNeighbors (min_neigh); //minimum number of neigbors to find in the sphere of radius SalientRadius
+			iss.setNonMaxRadius (0.2f); // rayon pour prendre en compte les voisins dans la comparaison de lambda3 (on ne garde que le point avec le plus petit lambda3)
 			iss.setNormals(normals);
 			iss.setThreshold21(gamma);
 			iss.setThreshold32(gamma);
 
-                        //iss.setBorderRadius ((min_neigh-1) * resolution); // at wich point it belongs to border
-
-			iss.setMinNeighbors (min_neigh); //minimum number of neigbors to find in the sphere of radius SalientRadius
-			iss.setAngleThreshold (static_cast<float> (M_PI) / 3.0);
+                        iss.setBorderRadius (0.2f); // at wich point it belongs to border
+			
+		//	iss.setAngleThreshold (static_cast<float> (M_PI) / 3.0);
 		//	iss.setNumberOfThreads (1);
 
 			iss.setInputCloud (inputCloud);
