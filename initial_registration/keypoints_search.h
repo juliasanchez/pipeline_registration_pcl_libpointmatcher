@@ -30,7 +30,7 @@ public:
   void getKeypoints(typename pcl::PointCloud<points>::Ptr);
 	void setInputNormals(typename pcl::PointCloud<pcl::Normal>::Ptr&);
 	void setParameters(float,int,int);
-	void setParameters(float, int);
+        void setParameters(float, int, float);
 	void setTree(typename pcl::search::KdTree<points>::Ptr&);
 
 private:
@@ -44,6 +44,7 @@ private:
 	int scales;
 	float gamma;
 	int min_neigh;
+        float radius;
 	typename pcl::search::KdTree<points>::Ptr tree;
 };
 

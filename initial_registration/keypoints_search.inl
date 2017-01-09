@@ -61,10 +61,11 @@ void keypoints_search<points>::setParameters(float sigma0in, int octavesin, int 
 }
 
 template<class points>
-void keypoints_search<points>::setParameters(float gammain, int min_neighin )
+void keypoints_search<points>::setParameters(float gammain, int min_neighin, float rad )
 {
 	gamma=gammain;
 	min_neigh=min_neighin;
+        radius=rad;
 }
 
 template<class points>
@@ -113,14 +114,15 @@ void keypoints_search<points>::getKeypoints(typename pcl::PointCloud<points>::Pt
 		case 1:
 		{
 			pcl::SIFTKeypoint<points, points> sift;
-			//sift.setSearchMethod(typename pcl::search::KdTree<points>::Ptr(new pcl::search::KdTree<points>));
-			sift.setSearchMethod(tree);
-			sift.setScales(sigma0, octaves, scales);
-			//sift.setScales(0.01f, 3, 2);  // sigma du plus gros floutage (1cm), nombre d'octaves, nombre de floutages dans chaque octave
-			sift.setMinimumContrast(0); // on enlève du keypoint avec pas assez de différences avec ses voisins
+                        sift.setSearchMethod(typename pcl::search::KdTree<points>::Ptr(new pcl::search::KdTree<points>));
+                        //sift.setSearchMethod(tree);
+                        //std::cout<<"sigma : "<<sigma0<<" octaves : "<<octaves<<" scales : "<<scales<<std::endl;
+                        sift.setScales(sigma0, octaves, scales);
+                        //sift.setScales(0.01f, 3, 2);  // sigma du plus petit floutage (1cm), nombre d'octaves, nombre de floutages dans chaque octave
+                        sift.setMinimumContrast(0); // on enlève du keypoint avec pas assez de différences avec ses voisins
 
 			sift.setInputCloud(inputCloud);
-			sift.compute(*keypoints);
+                        sift.compute(*keypoints);
 			break;
 		}
 		case 2:
@@ -128,21 +130,21 @@ void keypoints_search<points>::getKeypoints(typename pcl::PointCloud<points>::Pt
 
 			pcl::ISSKeypoint3D<points, points> iss;
 			iss.setSearchMethod ( tree );
-			iss.setSalientRadius ((min_neigh+1) * resolution); // about 6 points to compute scatter matrix
-			iss.setNonMaxRadius ((min_neigh-1) * resolution); // toujours pas compris ce parametre
+                        iss.setSalientRadius (radius); // about 6 points to compute scatter matrix
+			iss.setMinNeighbors (min_neigh); //minimum number of neigbors to find in the sphere of radius SalientRadius
+			iss.setNonMaxRadius (0.2f); // rayon pour prendre en compte les voisins dans la comparaison de lambda3 (on ne garde que le point avec le plus petit lambda3)
 			iss.setNormals(normals);
 			iss.setThreshold21(gamma);
 			iss.setThreshold32(gamma);
 
-			iss.setBorderRadius ((min_neigh-1) * resolution); // at wich point it belongs to border
-
-			iss.setMinNeighbors (min_neigh); //minimum number of neigbors to find in the sphere of radius SalientRadius
-			iss.setAngleThreshold (static_cast<float> (M_PI) / 3.0);
+                        iss.setBorderRadius (0.2f); // at wich point it belongs to border
+			
+		//	iss.setAngleThreshold (static_cast<float> (M_PI) / 3.0);
 		//	iss.setNumberOfThreads (1);
 
 			iss.setInputCloud (inputCloud);
 			iss.compute (*keypoints);
-			break;
+			break;     
 		}
 	}
 

@@ -13,6 +13,9 @@
 #include <pcl/common/common.h>
 #include <pcl/search/kdtree.h>
 #include <pcl/filters/statistical_outlier_removal.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/filters/uniform_sampling.h>
+#include <pcl/filters/conditional_removal.h>
 
 
 #if defined _MSC_VER
@@ -33,6 +36,7 @@ public:
 	void getSize(int*);
 	void load (std::string);
 	double computeCloudResolution ();
+        void sample();
 
 
 private:

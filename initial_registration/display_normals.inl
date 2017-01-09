@@ -1,9 +1,9 @@
-void display_normals (pcl::PointCloud<pcl::PointXYZI>::Ptr cloud1, pcl::PointCloud<pcl::Normal>::Ptr normals)
+void display_normals (pcl::PointCloud<pcl::PointXYZI>::Ptr cloud, pcl::PointCloud<pcl::Normal>::Ptr normals)
 {
 	pcl::visualization::PCLVisualizer viewer ("Pointcloud");
 	pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZI> cloud_color (cloud, 0, 0, 255);
 	// We add the point cloud to the viewer and pass the color handler
-	viewer.addPointCloud (cloud1, cloud1_color, "cloud");
+        viewer.addPointCloud (cloud, cloud_color, "cloud");
 	viewer.initCameraParameters ();
 	viewer.addCoordinateSystem (1.0, "cloud", 0);
 	viewer.setBackgroundColor(0.05, 0.05, 0.05, 0); // Setting background to a dark grey
@@ -13,7 +13,6 @@ void display_normals (pcl::PointCloud<pcl::PointXYZI>::Ptr cloud1, pcl::PointClo
 
 	while (!viewer.wasStopped ()) 
 	{ // Display the visualiser until 'q' key is pressed
-	viewer.spinOnce ();
+	viewer.spinOnce (10);
 	}
-  }
-}
+ }

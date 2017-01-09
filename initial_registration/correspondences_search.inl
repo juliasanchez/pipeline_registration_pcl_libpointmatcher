@@ -156,7 +156,7 @@ void correspondences_search<points>::DetermineCorrespondences()
 			*src_descriptor_ptr=src_descriptor;
 			*tgt_descriptor_ptr=tgt_descriptor;
 			pcl::registration::CorrespondenceEstimation<descriptor_points, descriptor_points> est;
-		  est.setInputSource(src_descriptor_ptr);
+                        est.setInputSource(src_descriptor_ptr);
 			est.setInputTarget(tgt_descriptor_ptr);
 			est.determineCorrespondences(correspondences);
 }

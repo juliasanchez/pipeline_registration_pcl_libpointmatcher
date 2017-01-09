@@ -50,6 +50,17 @@ void cloud<points>::getTree(typename pcl::search::KdTree<points>::Ptr &tree_out)
 }
 
 template<typename points>
+void cloud<points>::sample()
+{
+    pcl::UniformSampling<points> uniform_sampling;
+    uniform_sampling.setInputCloud (cloud_in);
+    uniform_sampling.setRadiusSearch (0.03);
+    std::cout << "before : " << cloud_in->size ()<<std::endl;
+    uniform_sampling.filter (*cloud_in);
+    std::cout << " after sampling : " << cloud_in->size () << std::endl<<std::endl;
+}
+
+template<typename points>
 void cloud<points>::getSize(int *size)
 {
 	*size=cloud_in->width*cloud_in->height;
@@ -67,20 +78,35 @@ void cloud<points>::load(std::string pcd_file)
 template<typename points>
 void cloud<points>::clean()
 {
-	std::vector<int> indices;
-	pcl::removeNaNFromPointCloud(*cloud_in, *cloud_in, indices);
-	pcl::StatisticalOutlierRemoval<points> sor;
-  sor.setInputCloud (cloud_in);
-  sor.setMeanK (50);
-  sor.setStddevMulThresh (1.0);
-  sor.filter (*cloud_in);
+    std::vector<int> indices;
+    pcl::removeNaNFromPointCloud(*cloud_in, *cloud_in, indices);
+//    pcl::StatisticalOutlierRemoval<points> sor;
+//    sor.setInputCloud (cloud_in);
+//    sor.setMeanK (50);
+//    sor.setStddevMulThresh (1.0);
+//    sor.filter (*cloud_in);
 
-	pcl::PassThrough<points> pass;
-	pass.setInputCloud (cloud_in);
-	pass.setFilterFieldName ("z");
-	pass.setFilterLimits (0.0,0.0);
-	pass.setFilterLimitsNegative (true);
-	pass.filter (*cloud_in);
+    typename pcl::ConditionAnd<points>::Ptr condition (new pcl::ConditionAnd<points>);
+    condition->addComparison(typename pcl::FieldComparison<points>::ConstPtr(new typename pcl::FieldComparison<points>("x", pcl::ComparisonOps::LT, 3)));
+    condition->addComparison(typename pcl::FieldComparison<points>::ConstPtr(new typename pcl::FieldComparison<points>("y", pcl::ComparisonOps::LT, 3)));
+    condition->addComparison(typename pcl::FieldComparison<points>::ConstPtr(new typename pcl::FieldComparison<points>("z", pcl::ComparisonOps::LT, 3)));
+
+    pcl::ConditionalRemoval<points> filter (condition);
+    filter.setInputCloud(cloud_in);
+    filter.filter(*cloud_in);
+
+    pcl::PassThrough<points> pass;
+    pass.setInputCloud (cloud_in);
+    pass.setFilterFieldName ("z");
+    pass.setFilterLimits (0.0,0.0);
+    pass.setFilterLimitsNegative (true);
+    pass.filter (*cloud_in);
+
+    pass.setInputCloud (cloud_in);
+    pass.setFilterFieldName ("z");
+    pass.setFilterLimits (15,15);
+    pass.setFilterLimitsNegative (true);
+    pass.filter (*cloud_in);
 }
 
 template<typename points>

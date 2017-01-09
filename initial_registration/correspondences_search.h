@@ -7,7 +7,6 @@
 #include <pcl/point_types.h>
 #include <pcl/features/fpfh_omp.h>
 #include <pcl/registration/correspondence_estimation.h>
-#include <pcl/registration/correspondence_rejection_sample_consensus.h>
 #include <pcl/features/shot.h>
 #include <pcl/features/usc.h>
 #include <pcl/features/3dsc.h>
