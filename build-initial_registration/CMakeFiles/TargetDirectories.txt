@@ -1,3 +1,0 @@
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/build-initial_registration/CMakeFiles/rebuild_cache.dir
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/build-initial_registration/CMakeFiles/edit_cache.dir
-/home/julia/Desktop/pipeline_pcl_libpointmatcher/build-initial_registration/CMakeFiles/initial_registration.dir
