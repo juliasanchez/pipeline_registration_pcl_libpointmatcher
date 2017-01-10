@@ -137,7 +137,7 @@ void keypoints_search<points>::getKeypoints(typename pcl::PointCloud<points>::Pt
 			iss.setThreshold21(gamma);
 			iss.setThreshold32(gamma);
 
-                        iss.setBorderRadius (0.2f); // at wich point it belongs to border
+                        iss.setBorderRadius (0.1f); // at wich point it belongs to border
 			
 		//	iss.setAngleThreshold (static_cast<float> (M_PI) / 3.0);
 		//	iss.setNumberOfThreads (1);

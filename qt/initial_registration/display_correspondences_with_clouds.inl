@@ -13,5 +13,6 @@ viewer.addCorrespondences<pcl::PointXYZI> (keypoints1, keypoints2, correspondenc
 viewer.resetCamera (); 
   while (!viewer.wasStopped ()) { // Display the visualiser until 'q' key is pressed
     viewer.spinOnce (10);
+    //boost::this_thread::sleep(boost::posix_time::microseconds(10000));
   }
 }

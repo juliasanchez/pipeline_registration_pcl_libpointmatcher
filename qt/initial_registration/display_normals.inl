@@ -13,6 +13,7 @@ void display_normals (pcl::PointCloud<pcl::PointXYZI>::Ptr cloud, pcl::PointClou
 
 	while (!viewer.wasStopped ()) 
 	{ // Display the visualiser until 'q' key is pressed
-	viewer.spinOnce (10);
+	    viewer.spinOnce (50);
+    	//boost::this_thread::sleep(boost::posix_time::microseconds(10000));
 	}
  }
