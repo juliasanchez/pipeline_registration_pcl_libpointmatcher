@@ -1,15 +1,13 @@
 //ROUTINE TO REGISTER 2 POINTCLOUDS
 
 #include "display_clouds.h"
-#include "display_hist.h"
-#include "get_cost_matrix.h"
 #include "display_normals.h"
 #include "display_correspondences.h"
 #include "display_correspondences_with_clouds.h"
 #include "keypoints_search.h"
 #include "transformation_estimator.h"
 #include "cloud.h"
-
+//#include "transformation_estimator.h"
 #include <pcl/registration/transformation_validation_euclidean.h>
 #include <pcl/registration/correspondence_estimation.h>
 #include <pcl/registration/correspondence_rejection_median_distance.h>
@@ -19,8 +17,6 @@
 #include <pcl/features/3dsc.h>
 #include <pcl/features/usc.h>
 #include <string>
-#include <dlib/optimization/max_cost_assignment.h>
-#include<pcl/visualization/histogram_visualizer.h>
 
 // PCL INCLUDES
 
@@ -29,12 +25,11 @@ using pcl::transformPointCloud;
 //typedef pcl::PointXYZRGB pcl_point;
 typedef pcl::PointXYZI pcl_point;
 typedef Eigen::Matrix4f Matrix;
-typedef pcl::FPFHSignature33 descriptor;
-//typedef pcl::UniqueShapeContext1960 descriptor;
+//typedef pcl::FPFHSignature33 descriptor;
+typedef pcl::UniqueShapeContext1960 descriptor;
 
+void getFeature_3dsc(pcl::PointCloud<pcl_point>::Ptr cloudin,pcl::PointCloud<pcl_point>::Ptr keypoints, pcl::PointCloud<pcl::Normal>::Ptr normals, pcl::search::KdTree<pcl_point>::Ptr tree, float descriptor_radius, pcl::PointCloud<pcl::ShapeContext1980>* features);
 void getFeature_usc(pcl::PointCloud<pcl_point>::Ptr cloudin, pcl::PointCloud<pcl_point>::Ptr keypoints, pcl::search::KdTree<pcl_point>::Ptr tree, float descriptor_radius, pcl::PointCloud<pcl::UniqueShapeContext1960>* features);
-void getFeature_fpfh(   pcl::PointCloud<pcl_point>::Ptr cloudin,    pcl::PointCloud<pcl_point>::Ptr keypoints,    pcl::PointCloud<pcl::Normal>::Ptr normals,   pcl::search::KdTree<pcl_point>::Ptr tree,float descriptor_radius,    pcl::PointCloud<pcl::FPFHSignature33>* features);
-
 //...............................................................................................................................
 
 int main(int argc, char** argv)
@@ -170,125 +165,120 @@ int main(int argc, char** argv)
 
  //Correspondences with descriptors
 
+//    pcl::FPFHEstimation<pcl_point, pcl::Normal, descriptor> feature_estimation;
+//    feature_estimation.setRadiusSearch(0.2f);
+//    feature_estimation.setSearchSurface(cloud1);
+//    feature_estimation.setInputCloud(keypoints1);
+//    feature_estimation.setInputNormals(normals1);
+//    feature_estimation.setSearchMethod(tree1);
+//    feature_estimation.compute(features1);
+
+//   pcl::FPFHEstimation<pcl_point, pcl::Normal, descriptor> feature_estimation2;
+//    feature_estimation2.setRadiusSearch(0.2f);
+//    feature_estimation2.setSearchSurface(cloud2);
+//    feature_estimation2.setInputCloud(keypoints2);
+//    feature_estimation2.setInputNormals(normals2);
+//    feature_estimation2.setSearchMethod(tree2);
+//    feature_estimation2.compute(features2);
+
+//    getFeature_3dsc(cloud1, keypoints1, normals1, tree1, 0.2f, &features1);
+//    getFeature_3dsc(cloud2, keypoints2, normals2, tree2, 0.2f, &features2);
+
     float descriptor_radius= atof(argv[n]);
     n++;
 
-//    getFeature_usc(cloud1, keypoints1, tree1, descriptor_radius, &features1);
-//    getFeature_usc(cloud2, keypoints2, tree2, descriptor_radius, &features2);
-
-    getFeature_fpfh(cloud1,keypoints1, normals1, tree1,descriptor_radius,&features1);
-    getFeature_fpfh(cloud2,keypoints2, normals2, tree2,descriptor_radius,&features2);
-
-//    pcl::PointCloud<pcl_point>::Ptr keypoints (new pcl::PointCloud<pcl_point>);
-//    keypoints->width    = 1;
-//    keypoints->height   = 1;
-//    keypoints->points.resize (keypoints->width * keypoints->height);
-
-//    int selected_keypoint = atoi(argv[n]);
-//    n++;
-//    pcl::PointCloud<descriptor> features;
-//    keypoints->points[0]=keypoints1->points[selected_keypoint];
-//    getFeature_fpfh(cloud1,keypoints, normals1, tree1,descriptor_radius,&features);
-//    display_clouds(cloud1, keypoints, color2, color1, 1, 8);
-//    display_hist(&features);
-
-    int size_cost=std::max(features1.size(),features2.size());
-    dlib::matrix<float>* cost(size_cost,size_cost);
-    get_cost_matrix(features1, features2, *cost);
+    getFeature_usc(cloud1, keypoints1, tree1, descriptor_radius, &features1);
+    getFeature_usc(cloud2, keypoints2, tree2, descriptor_radius, &features2);
 
 
-    /// to transform into function
-
-//    pcl::PointCloud<descriptor>::Ptr src_descriptor_ptr(new pcl::PointCloud<descriptor>);
-//    pcl::PointCloud<descriptor>::Ptr tgt_descriptor_ptr(new pcl::PointCloud<descriptor>);
-//    *src_descriptor_ptr=features1;
-//    *tgt_descriptor_ptr=features2;
-
-//    pcl::Correspondences* correspondences=new pcl::Correspondences();
-
-//    int keypoints_skipped =0;
-//    int n_corr=0;
-//    int tot_n_corr=0;
-//    int size_cost=std::max(features1.size(),features2.size());
-//    dlib::matrix<int> cost(size_cost,size_cost);
-//    cost=dlib::zeros_matrix<int> (size_cost,size_cost);
-
-//    int inf = std::numeric_limits<float>::infinity();
-
-//    for (size_t i = 0; i < size_cost; ++i)
+//    for (size_t i = 0; i < features1.size (); ++i)
 //    {
-//        if(i<features1.size())
-//        {
-//            if (!pcl_isfinite (features1.points[i].histogram[0])) //skipping NaNs
-//           //   if (!pcl_isfinite (features1.at(i).descriptor[0])) //skipping NaNs
-//              {
-//                ++keypoints_skipped;
-//                continue;
-//              }
-
-//            for(size_t j = 0; j < size_cost; ++j)
-//            {
-//                if(j<features2.size())
-//                {
-//                    for(int k = 0; k < 33; ++k)
-////                  for(int k = 0; k < 1960; ++k)
-//                    {
-////                    cost(i,j)=cost(i,j)+(features2.at(j).descriptor[k]-features1.at(i).descriptor[k])*(features2.at(j).descriptor[k]-features1.at(i).descriptor[k]);
-//                      cost(i,j)=cost(i,j)+(features2.at(j).histogram[k]-features1.at(i).histogram[k])*(features2.at(j).histogram[k]-features1.at(i).histogram[k]);
-
-//                    }
-//                }
-
-//                // to be sure to assign all values I add a column with very little values, the row that is too heavy to assign to a column will be assigned to this new column.
-
-//                else
-//                {
-//                   cost(i,j)=inf;
-//                }
-//            }
-//        }
-
-//        /// the part below is implemented implicitly in dlib
-//        // to be sure to assign all values I add a row with very little values, the column that is too heavy to assign to a row will be assigned to this new column.
-
-//        else
-//        {
-//            for(size_t j = 0; j < size_cost; ++j)
-//            {
-//                cost(i,j)=inf;
-//            }
-//        }
+//        std::cout<<"descriptor[100]: "<<features1.at(i).descriptor[100]<<std::endl<<std::endl;
+//        std::cout<<"descriptor[100]: "<<features2.at(i).descriptor[100]<<std::endl<<std::endl;
 //    }
-//        cost=-1.0*cost;
 
-    ///
-        std::cout<<"cost matrix : "<<std::endl<<*cost<<std::endl<<std::endl;
-        std::vector<long> assignment = max_cost_assignment(cost);
+    pcl::PointCloud<descriptor>::Ptr src_descriptor_ptr(new pcl::PointCloud<descriptor>);
+    pcl::PointCloud<descriptor>::Ptr tgt_descriptor_ptr(new pcl::PointCloud<descriptor>);
+    *src_descriptor_ptr=features1;
+    *tgt_descriptor_ptr=features2;
+
+    pcl::KdTreeFLANN<descriptor> match_search;
+    match_search.setInputCloud (tgt_descriptor_ptr);
+
+    //boost::shared_ptr<pcl::Correspondences> correspondences(new pcl::Correspondences());
+    pcl::Correspondences* correspondences=new pcl::Correspondences();
+    pcl::Correspondences* correspondences_global=new pcl::Correspondences();
+
+    std::vector<int> neigh_indices (1);
+    std::vector<float> neigh_sqr_dists (1);
+    int keypoints_skipped =0;
+    int n_corr=0;
+    int tot_n_corr=0;
+
+    float diff;
+    float temp;
+    int pos;
+
+    for (size_t i = 0; i < features1.size (); ++i)
+    {
+       // if (!pcl_isfinite (features1.points[i].histogram[0])) //skipping NaNs
+          if (!pcl_isfinite (features1.at(i).descriptor[0])) //skipping NaNs
+          {
+            ++keypoints_skipped;
+            continue;
+          }
+
+////manual method to compute the correspondence of the points
+//      for(size_t j = 0; j < features2.size (); ++j)
+//      {
+//          diff=0;
+//          for(int k = 0; k < 1960; ++k)
+//          {
+//            diff=diff+(features2.at(j).descriptor[k]-features1.at(i).descriptor[k])*(features2.at(j).descriptor[k]-features1.at(i).descriptor[k]);
+//          }
+//          if(diff<temp || j==0)
+//          {
+//              temp=diff;
+//              pos=static_cast<int> (j);
+//          }
+//      }
+
+//      std::cout << "1_ minimum distance: " <<temp<<std::endl<<std::endl;
+//      std::cout <<"1_ point in cloud2 for minimum distance: " << pos<<std::endl<<std::endl;
 
 
-        pcl::Correspondences* correspondences=new pcl::Correspondences();
-        int n_corr=0;
-        int tot_n_corr=0;
-        std::cout<<" correspondences: ";
-        for (int i=0; i<assignment.size(); ++i)
-        {
-//            std::cout<<"cost : "<<std::endl<<cost(i, assignment[i])<<std::endl<<std::endl;
-//            std::cout<<"compared to : "<<std::endl<<-1.0*atof(argv[n])<<std::endl<<std::endl;
-            if(cost(i, assignment[i]) > -1*atof(argv[n])) //  add match only if the squared descriptor distance is less than 0.25
-            {
-            pcl::Correspondence corr (static_cast<int> (i), assignment[i], cost(i, assignment[i]));
-            correspondences->push_back (corr);
-            n_corr++;
-            tot_n_corr++;
-            std::cout<<", "<<assignment[i];
-            }
-        }
-        n++;
-        std::cout<<std::endl<<std::endl;
+//        float mini = *std::min_element(std::begin(diff), std::end(diff));
+//        std::cout << "1 minimum distance: " <<mini<<std::endl<<std::endl;
+//        std::cout <<"1 point in cloud2 for minimum distance: " << std::distance(std::begin(diff), &mini)<<std::endl<<std::endl;
 
-        std::cout<<"number of correspondences: "<<tot_n_corr<<std::endl<<std::endl;
+
+      int found_neighs = match_search.nearestKSearch (features1.at (i), 1, neigh_indices, neigh_sqr_dists);
+      std::cout<<"2_ minimum distance:"<<neigh_sqr_dists[0]<<std::endl<<std::endl;
+      std::cout << "2_ point in cloud2 for minimum distance: " << neigh_indices[0]<<std::endl<<std::endl;
+
+      if(found_neighs == 1 && neigh_sqr_dists[0] < atof(argv[n])) //  add match only if the squared descriptor distance is less than 0.25 (SHOT descriptor distances are between 0 and 1 by design)
+      {
+        pcl::Correspondence corr (static_cast<int> (i), neigh_indices[0], neigh_sqr_dists[0]);
+        correspondences->push_back (corr);
+        correspondences_global->push_back (corr);
+        n_corr++;
+        tot_n_corr++;
+      }
+      else if (found_neighs == 1)
+      {
+        pcl::Correspondence corr (static_cast<int> (i), neigh_indices[0], neigh_sqr_dists[0]);
+        correspondences_global->push_back (corr);
+        tot_n_corr++;
+      }
+    }
+    n++;
+
+        std::cout<<"number of skipped keypoints : "<<keypoints_skipped<<std::endl<<std::endl;
+        std::cout<<"total number of correspondences: "<<tot_n_corr<<std::endl<<std::endl;
+        std::cout<<"number of correspondences selected : "<<n_corr<<std::endl<<std::endl;
 
       display_correspondences_with_clouds(cloud1, keypoints1, cloud2, keypoints2, *correspondences);
+      display_correspondences_with_clouds(cloud1, keypoints1, cloud2, keypoints2, *correspondences_global);
 
 //    pcl::registration::CorrespondenceEstimation<descriptor, descriptor> est;
 
@@ -325,7 +315,20 @@ int main(int argc, char** argv)
     return 0;
 }
 
+void getFeature_3dsc(pcl::PointCloud<pcl_point>::Ptr cloudin, pcl::PointCloud<pcl_point>::Ptr keypoints, pcl::PointCloud<pcl::Normal>::Ptr normals, pcl::search::KdTree<pcl_point>::Ptr tree, float descriptor_radius, pcl::PointCloud<pcl::ShapeContext1980>* features)
+{
+        pcl::ShapeContext3DEstimation<pcl_point, pcl::Normal, pcl::ShapeContext1980> feature_estimation;
+        feature_estimation.setSearchMethod(tree);
 
+        feature_estimation.setSearchSurface(cloudin);
+        feature_estimation.setInputCloud(keypoints);
+        feature_estimation.setInputNormals(normals);
+
+        feature_estimation.setMinimalRadius(descriptor_radius / 10.0);
+        feature_estimation.setRadiusSearch(descriptor_radius);
+        feature_estimation.setPointDensityRadius(descriptor_radius/ 5.0);
+        feature_estimation.compute(*features);
+}
 
 void getFeature_usc(pcl::PointCloud<pcl_point>::Ptr cloudin, pcl::PointCloud<pcl_point>::Ptr keypoints, pcl::search::KdTree<pcl_point>::Ptr tree, float descriptor_radius, pcl::PointCloud<pcl::UniqueShapeContext1960>* features)
 {
@@ -342,17 +345,5 @@ void getFeature_usc(pcl::PointCloud<pcl_point>::Ptr cloudin, pcl::PointCloud<pcl
         std::cout<<"bins 3  :"<<feature_estimation.getRadiusBins()<<std::endl;
 
         feature_estimation.setLocalRadius(descriptor_radius); //radius for local frame
-        feature_estimation.compute(*features);
-}
-
-void getFeature_fpfh(   pcl::PointCloud<pcl_point>::Ptr cloudin,    pcl::PointCloud<pcl_point>::Ptr keypoints,    pcl::PointCloud<pcl::Normal>::Ptr normals,   pcl::search::KdTree<pcl_point>::Ptr tree,float descriptor_radius,    pcl::PointCloud<pcl::FPFHSignature33>* features)
-{
-        pcl::FPFHEstimation<pcl_point, pcl::Normal, pcl::FPFHSignature33> feature_estimation;
-
-        feature_estimation.setSearchMethod(tree);
-        feature_estimation.setRadiusSearch(descriptor_radius); //10 cm recherche des voisins pour faire le descriptor
-        feature_estimation.setSearchSurface(cloudin);
-        feature_estimation.setInputCloud(keypoints);
-        feature_estimation.setInputNormals(normals);
         feature_estimation.compute(*features);
 }
