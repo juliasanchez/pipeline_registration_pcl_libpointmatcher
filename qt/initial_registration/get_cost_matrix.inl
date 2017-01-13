@@ -1,12 +1,12 @@
 void get_cost_matrix(pcl::PointCloud<pcl::FPFHSignature33> features1, pcl::PointCloud<pcl::FPFHSignature33> features2, dlib::matrix<float>* cost)
 {
-    pcl::PointCloud<pcl::FPFHSignature33>::Ptr src_pcl::FPFHSignature33_ptr(new pcl::PointCloud<pcl::FPFHSignature33>);
-    pcl::PointCloud<pcl::FPFHSignature33>::Ptr tgt_pcl::FPFHSignature33_ptr(new pcl::PointCloud<pcl::FPFHSignature33>);
-    *src_pcl::FPFHSignature33_ptr=features1;
-    *tgt_pcl::FPFHSignature33_ptr=features2;
+    pcl::PointCloud<pcl::FPFHSignature33>::Ptr src_descriptor_ptr(new pcl::PointCloud<pcl::FPFHSignature33>);
+    pcl::PointCloud<pcl::FPFHSignature33>::Ptr tgt_descriptor_ptr(new pcl::PointCloud<pcl::FPFHSignature33>);
+    *src_descriptor_ptr=features1;
+    *tgt_descriptor_ptr=features2;
 
     int keypoints_skipped =0;
-    cost=dlib::zeros_matrix<int> (size_cost,size_cost);
+    *cost=dlib::zeros_matrix<int> (size_cost,size_cost);
 
     int inf = std::numeric_limits<float>::infinity();
 
@@ -27,7 +27,7 @@ void get_cost_matrix(pcl::PointCloud<pcl::FPFHSignature33> features1, pcl::Point
                 {
                     for(int k = 0; k < 33; ++k)
                     {
-                      cost(i,j)=cost(i,j)+(features2.at(j).histogram[k]-features1.at(i).histogram[k])*(features2.at(j).histogram[k]-features1.at(i).histogram[k]);
+                      *cost(i,j)=*cost(i,j)+(features2.at(j).histogram[k]-features1.at(i).histogram[k])*(features2.at(j).histogram[k]-features1.at(i).histogram[k]);
                     }
                 }
 
@@ -35,7 +35,7 @@ void get_cost_matrix(pcl::PointCloud<pcl::FPFHSignature33> features1, pcl::Point
 
                 else
                 {
-                   cost(i,j)=inf;
+                   *cost(i,j)=inf;
                 }
             }
         }
@@ -47,9 +47,9 @@ void get_cost_matrix(pcl::PointCloud<pcl::FPFHSignature33> features1, pcl::Point
         {
             for(size_t j = 0; j < size_cost; ++j)
             {
-                cost(i,j)=inf;
+                *cost(i,j)=inf;
             }
         }
     }
-        cost=-1.0*cost;
+        *cost=-1.0*(*cost);
 }
