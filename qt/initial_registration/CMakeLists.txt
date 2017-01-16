@@ -28,6 +28,8 @@ endif(DLIB_FOUND)
 
 add_executable(initial_registration main.cpp)
 
+target_link_libraries(initial_registration ${DLIB_LIBRARIES})
+
 target_link_libraries(initial_registration ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_FEATURES_LIBRARIES} ${PCL_SEARCH_LIBRARIES} ${PCL_KEYPOINTS_LIBRARIES} ${PCL_REGISTRATION_LIBRARIES} ${PCL_FILTERS_LIBRARIES} ${PCL_VISUALIZATION_LIBRARIES})
 
-target_link_libraries(initial_registration ${DLIB_LIBRARIES})
+
