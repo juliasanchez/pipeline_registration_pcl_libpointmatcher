@@ -234,6 +234,8 @@ int main(int argc, char** argv)
     rejector.setMaximumIterations(500);
     rejector.getCorrespondences(correspondences_out);
     display_correspondences_with_clouds(cloud1, keypoints1, cloud2, keypoints2, correspondences_out);
+    
+    ///GET TRANSFORMATION----------------------------------------------------------------------------------------------------------------
 
     if (correspondences->size()>0)
     {
